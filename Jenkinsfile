@@ -16,8 +16,14 @@ pipeline {
         }
         stage('storage') {
             steps {
-              //change your required bucket details
                 googleStorageUpload bucket: 'gs://jenkins-bkt', credentialsId: 'json_key', pattern: 'target/*.war'
+            }
+        }
+        stage('Deploy to Tomcat') {
+            steps {
+                //check your path carefully
+                sh 'gsutil cp gs://jenkins-bkt/target/NETFLIX-1.2.2.war .'
+                sh 'mv -f ./*.war /home/kundodinesh0/apache-tomcat-9.0.88/webapps'
             }
         }
     }
